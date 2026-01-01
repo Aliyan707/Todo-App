@@ -1,55 +1,60 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Feature Specification: In-Memory Console Todo App (Phase I)
 
-## Core Principles
+## User Stories
+- As a user, I can add a new task with a title and optional description.
+- As a user, I can see a numbered list of all my tasks with their status.
+- As a user, I can update the title or description of any task.
+- As a user, I can delete any task by its ID.
+- As a user, I can mark any task as complete or incomplete.
+- As a user, I can quit the application.
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+## Acceptance Criteria
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### 1. Add Task
+- Command: `add`
+- Prompt: "Enter task title: " then "Enter description (optional): "
+- Title is required (1–200 chars). If empty, show error.
+- Description is optional.
+- Task gets auto-incrementing ID starting from 1.
+- Task is added to in-memory list.
+- Confirmation message: "Task added: [title] (ID: X)"
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### 2. List Tasks
+- Command: `list` or empty input (default action)
+- Shows all tasks in a clean table format:
+  ID | Title                  | Description (truncated) | Status
+  1  | Buy groceries          | Milk, eggs, bread       | Pending
+  2  | Finish report          |                         | Completed
+- Status shows "Pending" or "Completed"
+- If no tasks: "No tasks yet."
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### 3. Update Task
+- Command: `update <id>`
+- Prompt: "New title (leave blank to keep): " then "New description (leave blank to keep): "
+- If task ID not found: "Task not found."
+- Only update fields that are provided.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### 4. Delete Task
+- Command: `delete <id>`
+- If ID exists: remove task and show "Task deleted."
+- If not: "Task not found."
 
-### [PRINCIPLE_6_NAME]
+### 5. Mark Complete/Incomplete
+- Command: `complete <id>` or `uncomplete <id>`
+- Toggles the completed flag.
+- Confirmation: "Task marked as [Completed/Pending]"
 
+### 6. Quit
+- Command: `quit` or `q` or Ctrl+C
+- Graceful exit with "Goodbye!"
 
-[PRINCIPLE__DESCRIPTION]
+## Error Handling
+- Invalid command → "Unknown command. Try: add, list, update, delete, complete, quit"
+- Invalid ID → "Task not found."
+- Empty title → "Title is required."
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
-
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
-
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
-
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+## Non-Functional Requirements
+- Application must run with: python src/todo.py
+- No external packages
+- Code must be organized into clear functions (e.g., add_task, list_tasks, etc.)
+- Main loop should be clean and easy to follow
